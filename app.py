@@ -5,24 +5,24 @@ import datetime
 import logging
 from Agents3 import pipeline
 
-# -----------------------------------------------------------
+
 # Configure logging
-# -----------------------------------------------------------
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# -----------------------------------------------------------
+
 # FastAPI App Setup
-# -----------------------------------------------------------
+
 app = FastAPI(
     title="Multi-Agent Research System API",
     description="FastAPI interface for the LangChain multi-agent research pipeline.",
     version="2.0"
 )
 
-# -----------------------------------------------------------
+
 # Request & Response Models
-# -----------------------------------------------------------
+
 class TopicRequest(BaseModel):
     topic: str
 
@@ -33,16 +33,16 @@ class SummaryResponse(BaseModel):
     sources: List[str]
     generated_at: str
 
-# -----------------------------------------------------------
+
 # Root Endpoint
-# -----------------------------------------------------------
+
 @app.get("/")
 async def root():
     return {"message": "Welcome to the Multi-Agent Research API. Use POST /research_summary"}
 
-# -----------------------------------------------------------
+
 # Research Summary Endpoint
-# -----------------------------------------------------------
+
 @app.post("/research_summary", response_model=SummaryResponse)
 async def get_research_summary(request: TopicRequest):
     topic = request.topic.strip()
@@ -69,3 +69,4 @@ async def get_research_summary(request: TopicRequest):
     except Exception as e:
         logger.error(f"[API] Pipeline execution failed: {e}")
         raise HTTPException(status_code=500, detail=f"Pipeline execution failed: {e}")
+
