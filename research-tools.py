@@ -5,7 +5,7 @@ from datetime import datetime
 import wikipedia
 import logging
 
-# ---------------- Logging Setup ---------------- #
+#  Logging Setup 
 logging.basicConfig(
     filename="mcp_tools.log",
     level=logging.INFO,
@@ -79,3 +79,4 @@ if __name__ == "__main__":
     logging.info("Starting MCP FastMCP server for ResearchAgent")
     mcp.run(transport="stdio")
     logging.info("MCP FastMCP server stopped")
+
