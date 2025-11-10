@@ -26,6 +26,14 @@
 +---------------------------------------------------------------+
 
 
+## HOW IT WORKS / AGENTS COMMUNICATION
+1. agent-system.py launches the MCP FastMCP server (research-tools.py) using stdio transport — enabling tool-based communication between agents and the MCP server.
+2. The server exposes tools (search_web, analyze_snippets, summarize_analysis) which are automatically loaded by the LangChain load_mcp_tools() adapter.
+3. The Research Agent invokes search_web() through the MCP layer to fetch relevant Wikipedia snippets and URLs about the given topic.
+4. The Analysis Agent processes the snippets by calling analyze_snippets() — extracting key insights and identifying main themes.
+5. The Summary Agent uses summarize_analysis() to compile all findings into a structured, timestamped research summary.
+6. All agent-to-tool communication happens via serialized JSON messages over MCP’s stdio transport — ensuring modular and language-agnostic integration.
+7. The orchestrator aggregates the outputs and presents a clean JSON-formatted summary containing key developments, main themes, and source URLs.
 
 ## Setup_Instructions
 1. Create & activate a virtualenv (recommended)
