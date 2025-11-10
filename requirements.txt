@@ -1,3 +1,10 @@
+# Core frameworks
+fastapi
+uvicorn
+
+# Validation and models
+pydantic
+
 # LangChain Core
 langchain
 langchain-core
@@ -38,4 +45,5 @@ chromadb
 tiktoken
 pypdf
 faiss-cpu
+
 unstructured
