@@ -12,7 +12,7 @@ from langchain_core.messages import AIMessage, HumanMessage
 
 import ast  # safer than eval for structured literals
 
-# ---------------- Logging ---------------- #
+#  Logging 
 log_file = "research_workflow.log"
 logging.basicConfig(
     level=logging.INFO,
@@ -23,15 +23,15 @@ logging.basicConfig(
     ]
 )
 
-# ---------------- LLM ---------------- #
+# LLM 
 llm = HuggingFaceEndpoint(
     repo_id="mistralai/Mistral-7B-Instruct-v0.2",
-    task="chat-completion",
+    task="chat-completion"
     
 )
 model = ChatHuggingFace(llm=llm)
 
-# ================== Agents ================== #
+#  Agents 
 class ResearchAgent:
     def __init__(self, tools):
         self.agent = create_agent(model, tools)
@@ -123,7 +123,7 @@ class SummaryAgent:
         logging.info("Summary generation completed.")
         return summary_dict
 
-# ================== Workflow ================== #
+#  Workflow 
 async def main():
     topic = input("Enter a research topic: ").strip()
     if not topic:
@@ -154,7 +154,7 @@ async def main():
             summary = await summary_agent.run(topic, analysis_result, research_result)
 
             # Step 4: Print nicely
-            print("######################################")
+        
             print(summary)
             print(f"\nTopic: {summary['topic']}")
             print("=== RESEARCH SUMMARY ===")
@@ -173,3 +173,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
