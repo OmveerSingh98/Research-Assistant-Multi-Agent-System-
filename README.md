@@ -38,7 +38,7 @@ ARCHITECTURE DIAGRAM
    - summary_agent(AnalysisData) — prompts Gemini to return a strict JSON object with `key_developments`, `main_themes`, and `sources`. The agent also merges model-provided sources with research-derived links and returns a final dict.
 4. `app.py` returns a clean JSON response with `topic`, `key_developments`, `main_themes`, `sources`, `generated_at`.
 5. Communication between agents is via typed Python objects (`ResearchData`, `AnalysisData`) passed along the RunnableLambda chain.
-6. Each agent writes detailed logs (start, success, and error events) into both the console and a agent_pipeline.log file.
+6. Each agent writes detailed logs (start, success, and error events) into both the console and a agent_pipeline.log file. This log includes time-stamped entries for every major pipeline stage, so you can trace how data flows between agents and easily debug or audit each run.
 
 ## SETUP_INSTRUCTIONS
 
