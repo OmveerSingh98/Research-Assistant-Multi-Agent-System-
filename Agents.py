@@ -9,9 +9,9 @@ from langchain_community.tools import DuckDuckGoSearchResults
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.runnables import RunnableLambda
 
-# ==================================
+
 # Configure logging
-# ==================================
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(message)s',
@@ -22,16 +22,16 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# ==================================
+
 # Setup
-# ==================================
+
 load_dotenv()
 llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
 search_tool = DuckDuckGoSearchResults()
 
-# ==================================
+
 # Pydantic Models for Structure
-# ==================================
+
 class Source(BaseModel):
     title: str
     link: str
@@ -46,9 +46,9 @@ class AnalysisData(BaseModel):
     analysis: str
     sources: List[Source] = []
 
-# ==================================
+
 # Agent 1 – Research
-# ==================================
+
 def research_agent(topic: str) -> ResearchData:
     logger.info(f"[ResearchAgent] Searching DuckDuckGo for: {topic}")
     try:
@@ -93,9 +93,9 @@ def research_agent(topic: str) -> ResearchData:
         logger.error(f"[ResearchAgent] Search failed: {e}")
         return ResearchData(topic=topic, research=f"Search failed: {e}", sources=[])
 
-# ==================================
+
 # Agent 2 – Analysis
-# ==================================
+
 def analysis_agent(data: ResearchData) -> AnalysisData:
     logger.info("[AnalysisAgent] Analyzing research data...")
     try:
@@ -110,9 +110,9 @@ def analysis_agent(data: ResearchData) -> AnalysisData:
         logger.error(f"[AnalysisAgent] Analysis failed: {e}")
         return AnalysisData(topic=data.topic, analysis=f"Analysis failed: {e}", sources=data.sources)
 
-# ==================================
+
 # Agent 3 – Summary
-# ==================================
+
 def summary_agent(data: AnalysisData) -> str:
     logger.info("[SummaryAgent] Creating structured summary...")
 
@@ -150,18 +150,18 @@ def summary_agent(data: AnalysisData) -> str:
         logger.error(f"[SummaryAgent] Summary generation failed: {e}")
         return f"Summary generation failed: {e}"
 
-# ==================================
+
 # Build Runnable Chain
-# ==================================
+
 pipeline = (
     RunnableLambda(research_agent)
     | RunnableLambda(analysis_agent)
     | RunnableLambda(summary_agent)
 )
 
-# ==================================
+
 # Run the System
-# ==================================
+
 if __name__ == "__main__":
     topic = input("Enter a research topic: ").strip()
     logger.info(f"=== Starting Research Pipeline for Topic: {topic} ===")
@@ -173,3 +173,4 @@ if __name__ == "__main__":
         print(final_output)
     except Exception as e:
         logger.error(f"Pipeline execution failed: {e}")
+
