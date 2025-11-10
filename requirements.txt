@@ -9,6 +9,8 @@ pydantic
 langchain
 langchain-core
 langchain-community
+langchain-mcp-adapters
+mcp
 
 # OpenAI Integration
 langchain-openai
@@ -19,6 +21,7 @@ langchain-anthropic
 
 # --- Web Search ---
 duckduckgo-search
+wikipedia
 
 # Google Gemini (PaLM) Integration
 langchain-google-genai
@@ -47,3 +50,7 @@ pypdf
 faiss-cpu
 
 unstructured
+
+async-timeout
+beautifulsoup4
+
