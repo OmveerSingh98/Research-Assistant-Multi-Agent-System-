@@ -10,9 +10,9 @@ from langchain_community.tools import DuckDuckGoSearchResults
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.runnables import RunnableLambda
 
-# ==================================
+
 # Configure logging
-# ==================================
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(message)s',
@@ -23,16 +23,16 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# ==================================
+
 # Setup
-# ==================================
+
 load_dotenv()
 llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
 search_tool = DuckDuckGoSearchResults()
 
-# ==================================
+
 # Pydantic Models for Structure
-# ==================================
+
 class Source(BaseModel):
     title: str
     link: str
@@ -47,9 +47,9 @@ class AnalysisData(BaseModel):
     analysis: str
     sources: List[Source] = []
 
-# ==================================
+
 # Agent 1 – Research
-# ==================================
+
 def research_agent(topic: str) -> ResearchData:
     logger.info(f"[ResearchAgent] Searching DuckDuckGo for: {topic}")
     try:
@@ -57,7 +57,7 @@ def research_agent(topic: str) -> ResearchData:
         snippets = []
         sources: List[Source] = []
 
-        # ✅ Handle string output format (most recent LangChain versions)
+        # Handle string output format (most recent LangChain versions)
         if isinstance(results, str):
             # Extract any "title" and "https://" patterns
             link_matches = re.findall(r"(https?://[^\s\)\]]+)", results)
@@ -68,7 +68,7 @@ def research_agent(topic: str) -> ResearchData:
             research_text = results[:3000]  # truncate long output for LLM safety
             return ResearchData(topic=topic, research=research_text, sources=sources)
 
-        # ✅ Handle dict/list structure if DuckDuckGo ever returns it
+        # Handle dict/list structure if DuckDuckGo ever returns it
         elif isinstance(results, list):
             for r in results[:5]:
                 if isinstance(r, dict) and "link" in r:
@@ -85,9 +85,9 @@ def research_agent(topic: str) -> ResearchData:
         return ResearchData(topic=topic, research=f"Search failed: {e}", sources=[])
 
 
-# ==================================
+
 # Agent 2 – Analysis
-# ==================================
+
 def analysis_agent(data: ResearchData) -> AnalysisData:
     logger.info("[AnalysisAgent] Analyzing research data...")
     try:
@@ -102,9 +102,9 @@ def analysis_agent(data: ResearchData) -> AnalysisData:
         logger.error(f"[AnalysisAgent] Analysis failed: {e}")
         return AnalysisData(topic=data.topic, analysis=f"Analysis failed: {e}", sources=data.sources)
 
-# ==================================
+
 # Agent 3 – Summary (Improved JSON Parsing)
-# ==================================
+
 def summary_agent(data: AnalysisData) -> dict:
     """
     Generate structured JSON summary with separate key_developments, main_themes, and sources.
@@ -187,11 +187,12 @@ def summary_agent(data: AnalysisData) -> dict:
 
 
 
-# ==================================
+
 # Build Runnable Chain
-# ==================================
+
 pipeline = (
     RunnableLambda(research_agent)
     | RunnableLambda(analysis_agent)
     | RunnableLambda(summary_agent)
 )
+
